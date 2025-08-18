@@ -1,42 +1,35 @@
-"use client";
+'use client'
 
-import { useContext, useEffect } from "react";
-import { AuthContext } from "../../context/AuthContext";
-import { useRouter } from "next/navigation";
+import React, { useContext } from 'react'
+import AddMedicine from '../components/AddMedicine'
+import { AuthContext } from '../../context/AuthContext';
 
-export default function Dashboard() {
-  const { accessToken, user, logout } = useContext(AuthContext);
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!accessToken || !user) {
-      router.push("/login");
-    }
-  }, [accessToken, user, router]);
-
-  const handleLogout = () => {
-    logout();
-    router.push("/login");
-  };
-
-  if (!accessToken || !user) return null; 
+const Page = () => {
+  const {  user } = useContext(AuthContext);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">
-      <div className="w-full max-w-lg p-8 bg-white shadow-lg rounded-2xl text-center">
-        <h1 className="text-3xl font-bold text-blue-600 mb-4">
-          Welcome, {user.name}!
-        </h1>
-        <p className="text-gray-600 mb-6">
-          You are successfully logged in. Explore your dashboard and manage your account.
-        </p>
-        <button
-          onClick={handleLogout}
-          className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg shadow-md transition-colors duration-300"
-        >
-          Logout
-        </button>
-      </div>
+    <div className="max-w-2xl mx-auto mt-12 p-8 bg-white rounded-xl shadow-lg">
+      <h1 className="text-3xl font-bold mb-8 text-center text-blue-900">Dashboard</h1>
+
+      {!user ? (
+        <div className="bg-red-100 text-red-700 p-4 rounded mb-4 text-center font-semibold">
+          Please log in to view your dashboard.
+        </div>
+      ) : user.role === 'pharmacist' ? (
+        <div>
+          <div className="bg-teal-100 text-teal-800 p-4 rounded mb-6 text-center font-semibold">
+            Welcome, {user.name || 'Pharmacist'}! You can add new medicines below.
+          </div>
+          <AddMedicine />
+        </div>
+      ) : (
+        <div className="bg-yellow-100 text-yellow-800 p-4 rounded text-center font-semibold">
+          Welcome{user.name ? `, ${user.name}` : ''}!<br />
+          You have access to the normal dashboard.
+        </div>
+      )}
     </div>
-  );
+  )
 }
+
+export default Page
