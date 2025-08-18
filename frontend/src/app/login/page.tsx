@@ -6,7 +6,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const { login } = useContext(AuthContext); // use login from context
+  const { login } = useContext(AuthContext); 
   const router = useRouter();
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
