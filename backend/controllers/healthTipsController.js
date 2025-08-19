@@ -1,50 +1,60 @@
 import HealthTips from "../models/healthTipsModel.js";
 import mongoose from "mongoose";
-import cloudinary from '../utils/cloudinary.js'; 
+import cloudinary from "../utils/cloudinary.js"; 
+import fs from "fs";
 
-
-//create a health tip
+// Create a health tip
 export const createHealthTip = async (req, res) => {
+  try {
+    const { title, category, description } = req.body;
 
-	try {
-		const {
-			title,
-            category,
-            description,
+    if (!title || !category || !description) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide all fields!! (Backend error)",
+      });
+    }
 
-		} = req.body;
+    let imageUrl = "";
+    let imagePublicId = "";
 
-		if (!title || !category ||!description) {
-			return res.status(400).json({ success: false, message: "Please provide all fields!! (Sent the error from Backend)" });
-		}
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "healthTips",
+      });
 
-		const newHealthTip = new HealthTips({
-			title,
-            category,
-            description,
-            image: req.file?.path || "",
-		});
+      imageUrl = result.secure_url;
+      imagePublicId = result.public_id;
+    }
 
-		await newHealthTip.save();
-		res.status(201).json({ success: true, data: newHealthTip });
-	} catch (error) {
-		console.error("Error in Create Health Tip:", error.message);
-		res.status(500).json({ success: false, message: "Server Error" });
-	}
+    const newHealthTip = new HealthTips({
+      title,
+      category,
+      description,
+      image: imageUrl,
+      imagePublicId,
+    });
+
+    await newHealthTip.save();
+    res.status(201).json({ success: true, data: newHealthTip });
+  } catch (error) {
+    console.error("Error in Create Health Tip:", error.message);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
 };
 
-//get all health tips
+// Get all health tips
 export const getAllHealthTips = async (req, res) => {
-	try {
-		const healthTips = await HealthTips.find({});
-		res.status(200).json({ success: true, data: healthTips });
-	} catch (error) {
-		console.error("Error fetching Health Tips:", error);
-		res.status(500).json({ success: false, message: "Server Error" });
-	}
+  try {
+    const healthTips = await HealthTips.find({});
+    res.status(200).json({ success: true, data: healthTips });
+  } catch (error) {
+    console.error("Error fetching Health Tips:", error);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
 };
 
-//view single health tip
+// Get single health tip
 export const getSingleHealthTip = async (req, res) => {
   const { id } = req.params;
 
@@ -53,7 +63,6 @@ export const getSingleHealthTip = async (req, res) => {
   }
 
   try {
-
     const healthTip = await HealthTips.findById(id);
 
     if (!healthTip) {
@@ -67,7 +76,7 @@ export const getSingleHealthTip = async (req, res) => {
   }
 };
 
-//update a health tip
+// Update a health tip
 export const updateHealthTip = async (req, res) => {
   const { id } = req.params;
 
@@ -83,19 +92,33 @@ export const updateHealthTip = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Health Tip not found' });
     }
 
-    let image = existingHealthTip.image; 
+    let imageUrl = existingHealthTip.image;
+    let imagePublicId = existingHealthTip.imagePublicId;
+
     if (req.file) {
+      // Delete old image from Cloudinary
+      if (existingHealthTip.imagePublicId) {
+        await cloudinary.uploader.destroy(existingHealthTip.imagePublicId);
+      }
+
+      // Upload new image
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: 'healthTips',
       });
-      image = result.secure_url;
+
+      imageUrl = result.secure_url;
+      imagePublicId = result.public_id;
+
+      // Delete the temporary file
+      fs.unlink(req.file.path, (err) => {
+      if (err) console.error("Failed to delete temp file:", err);
+      });
     }
 
-    // Update health tip
     const updatedHealthTip = await HealthTips.findByIdAndUpdate(
       id,
-      { title, category, description, image },
-      { new: true, runValidators: true } 
+      { title, category, description, image: imageUrl, imagePublicId },
+      { new: true, runValidators: true }
     );
 
     res.status(200).json({ success: true, data: updatedHealthTip });
@@ -114,10 +137,27 @@ export const deleteHealthTip = async (req, res) => {
   }
 
   try {
-    const healthTip = await HealthTips.findByIdAndDelete(id);
+    const healthTip = await HealthTips.findById(id);
 
     if (!healthTip) {
       return res.status(404).json({ success: false, message: 'Health Tip not found' });
+    }
+
+    // Delete image from Cloudinary
+    if (healthTip.imagePublicId) {
+      await cloudinary.uploader.destroy(healthTip.imagePublicId);
+    }
+
+    // Delete record from DB
+    await HealthTips.findByIdAndDelete(id);
+
+    if (req.file) {
+
+      // Delete the temporary file
+      fs.unlink(req.file.path, (err) => {
+      if (err) console.error("Failed to delete temp file:", err);
+      });
+      
     }
 
     res.status(200).json({ success: true, message: 'Health Tip deleted successfully' });
