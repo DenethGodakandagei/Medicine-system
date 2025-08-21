@@ -1,3 +1,5 @@
+'use client'
+
 // components/SearchBar.tsx
 import React from 'react'
 import { SearchIcon } from 'lucide-react'
