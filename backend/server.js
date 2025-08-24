@@ -6,7 +6,6 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import pharmacistRoutes from "./routes/pharmacistRoutes.js";
 import medicineRoutes from "./routes/medicineRoutes.js";
-import broweseRoutes from "./routes/browseRoutes.js"
 
 dotenv.config();
 connectDB();
@@ -20,7 +19,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/pharmacists", pharmacistRoutes);
 app.use("/api/medicines", medicineRoutes);
-app.use("/api/browse",broweseRoutes)
+
 
 
 app.get("/", (req, res) => res.send("API is running"));
