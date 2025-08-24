@@ -22,6 +22,9 @@ export default function Navbar() {
             <Link href="/profile" className="hover:text-gray-300">
               Profile
             </Link>
+            <Link href="/healthTips" className="hover:text-gray-300">
+              Health Tips
+            </Link>
           </>
         )}
       </div>
