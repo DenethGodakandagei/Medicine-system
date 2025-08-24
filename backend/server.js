@@ -21,6 +21,7 @@ app.use("/api/pharmacists", pharmacistRoutes);
 app.use("/api/medicines", medicineRoutes);
 
 
+
 app.get("/", (req, res) => res.send("API is running"));
 
 const PORT = process.env.PORT || 5000;
