@@ -16,6 +16,9 @@ export default function Navbar() {
         </Link>
         {accessToken && user && (
           <>
+           <Link href="/" className="hover:text-gray-300">
+              Home
+            </Link>
             <Link href="/dashboard" className="hover:text-gray-300">
               Dashboard
             </Link>
