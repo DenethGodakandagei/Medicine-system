@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
+import Link from 'next/link'
 
 interface HealthTip {
-  id: string
+  _id: string
   title: string
   description: string
   category?: string
@@ -14,79 +15,42 @@ interface HealthTip {
 
 const Page = () => {
   const [healthTips, setHealthTips] = useState<HealthTip[]>([])
-  const [visibleTips, setVisibleTips] = useState<HealthTip[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const observerRef = useRef<IntersectionObserver | null>(null)
+  const [limit, setLimit] = useState(2) // load 2 at first
   const loadMoreRef = useRef<HTMLDivElement | null>(null)
 
-  // Fetch all health tips from the endpoint
   useEffect(() => {
     const fetchHealthTips = async () => {
       try {
-        setLoading(true)
-        const response = await axios.get('http://localhost:5000/api/healthTips', {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-
+        const response = await axios.get('http://localhost:5000/api/healthTips')
         const tips = Array.isArray(response.data) ? response.data : response.data.data || []
-        if (!Array.isArray(tips)) {
-          throw new Error('Unexpected response format: Expected an array of health tips')
-        }
-
         setHealthTips(tips)
-        // Show the first tip initially if available
-        if (tips.length > 0) {
-          setVisibleTips([tips[0]])
-        }
       } catch (err) {
-        console.error('Error fetching health tips:', err)
-        setError(
-          err instanceof Error
-            ? err.message
-            : 'An error occurred while fetching health tips'
-        )
+        setError('Failed to fetch health tips')
       } finally {
         setLoading(false)
       }
     }
-
     fetchHealthTips()
   }, [])
 
-  // Set up Intersection Observer to load more tips on scroll
+ 
   useEffect(() => {
-    if (healthTips.length === 0 || loading || error) return
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && currentIndex < healthTips.length - 1) {
-          setCurrentIndex((prev) => prev + 1)
-          setVisibleTips((prev) => [...prev, healthTips[currentIndex + 1]])
-        }
-      },
-      { threshold: 0.5 } // Trigger when 50% of the loadMoreRef div is visible
-    )
-
-    if (loadMoreRef.current) {
-      observerRef.current.observe(loadMoreRef.current)
-    }
-
-    return () => {
-      if (loadMoreRef.current && observerRef.current) {
-        observerRef.current.unobserve(loadMoreRef.current)
+    if (!loadMoreRef.current) return
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setLimit((prev) => (prev < healthTips.length ? prev + 1 : prev))
       }
-    }
-  }, [healthTips, currentIndex, loading, error])
+    })
+    observer.observe(loadMoreRef.current)
+    return () => observer.disconnect()
+  }, [healthTips])
 
   return (
-    
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-12">
-      <div className="max-w-2xl w-full px-4">
-        <h1 className="text-4xl font-bold text-center text-blue-900 mb-8">
+    <div className="min-h-screen bg-white flex flex-col items-center pt-28 pb-16 px-6">
+      <div className="max-w-5xl w-full">
+        <h1 className="text-4xl font-bold text-blue-900 mb-12 text-center">
           Health Tips
         </h1>
 
@@ -97,9 +61,7 @@ const Page = () => {
           </div>
         )}
 
-        {error && (
-          <p className="text-center text-red-600 text-lg">{error}</p>
-        )}
+        {error && <p className="text-center text-red-600 text-lg">{error}</p>}
 
         {!loading && !error && healthTips.length === 0 && (
           <p className="text-center text-gray-600 text-lg">
@@ -107,44 +69,55 @@ const Page = () => {
           </p>
         )}
 
-        {!loading && !error && visibleTips.length > 0 && (
-          <div className="space-y-6">
-            {visibleTips.map((tip) => (
-              <div
-                key={tip.id}
-                className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+        {!loading && !error && healthTips.length > 0 && (
+          <div className="space-y-12">
+            {healthTips.slice(0, limit).map((tip) => (
+              <article
+                key={tip._id}
+                className="grid md:grid-cols-2 gap-8 items-center  pb-10"
               >
-                {tip.image ? (
+                
+                <div>
                   <img
                     src={tip.image}
                     alt={tip.title}
-                    className="w-full h-48 object-cover rounded-lg mb-4"
+                    className="w-full h-100 object-cover rounded-lg"
                     onError={(e) => {
-                      e.currentTarget.src = 'https://via.placeholder.com/300x200?text=No+Image'
+                      e.currentTarget.src =
+                        'https://via.placeholder.com/600x400?text=No+Image'
                     }}
                   />
-                ) : (
-                  <img
-                    src="https://via.placeholder.com/300x200?text=No+Image"
-                    alt="Placeholder"
-                    className="w-full h-48 object-cover rounded-lg mb-4"
-                  />
-                )}
-                <h2 className="text-2xl font-semibold text-blue-800 mb-2">
-                  {tip.title}
-                </h2>
-                <p className="text-gray-600 mb-4">{tip.description}</p>
-                {tip.category && (
-                  <span className="inline-block bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">
-                    {tip.category}
-                  </span>
-                )}
-                {tip.createdAt && (
-                  <p className="text-sm text-gray-500 mt-2">
-                    Posted on {new Date(tip.createdAt).toLocaleDateString()}
+                </div>
+
+                
+                <div>
+                  <h2 className="text-3xl font-semibold text-blue-800 mb-4">
+                    {tip.title}
+                  </h2>
+                  <p className="text-gray-700 leading-relaxed line-clamp-4 mb-4">
+                    {tip.description}
                   </p>
-                )}
-              </div>
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-4">
+                    {tip.category && (
+                      <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
+                        {tip.category}
+                      </span>
+                    )}
+                    {tip.createdAt && (
+                      <span>
+                        Posted on {new Date(tip.createdAt).toLocaleDateString()}
+                      </span>
+                    )}
+                  </div>
+                  
+                  <Link
+                    href={`/healthTips/${tip._id}`}
+                    className="inline-block bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 transition"
+                  >
+                    Learn More
+                  </Link>
+                </div>
+              </article>
             ))}
             <div ref={loadMoreRef} className="h-10" />
           </div>
