@@ -2,6 +2,7 @@ import Medicine from "../models/MedicineModel.js";
 import Pharmacist from "../models/pharmacistModel.js";
 import cloudinary from "../utils/cloudinary.js";
 
+
 // Create new medicine
 export const createMedicine = async (req, res) => {
   const {
@@ -14,15 +15,9 @@ export const createMedicine = async (req, res) => {
     description,
     category,
     prescriptionRequired,
-    userId,
   } = req.body;
 
   try {
-    if (!userId) return res.status(400).json({ message: "User ID is required" });
-
-    const pharmacist = await Pharmacist.findOne({ user: userId });
-    if (!pharmacist) return res.status(404).json({ message: "Pharmacist not found" });
-
     let imageUrl = "";
     if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path, {
@@ -41,7 +36,6 @@ export const createMedicine = async (req, res) => {
       description,
       category,
       prescriptionRequired,
-      pharmacist: pharmacist._id,
       image: imageUrl,
     });
 
@@ -50,6 +44,7 @@ export const createMedicine = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 // Get all medicines
 export const getMedicines = async (req, res) => {

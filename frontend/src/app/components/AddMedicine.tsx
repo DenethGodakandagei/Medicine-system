@@ -154,7 +154,7 @@ export default function AddMedicine() {
         formDataToSend.append("image", image);
       }
 
-      const response = await fetch("/api/medicines", {
+      const response = await fetch("http://localhost:5000/api/medicines", {
         method: "POST",
         body: formDataToSend,
       });
