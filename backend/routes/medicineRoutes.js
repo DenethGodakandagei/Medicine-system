@@ -17,7 +17,7 @@ router.get("/", getMedicines);
 router.get("/:id", getMedicineById);
 
 // Pharmacist-only routes
-router.post("/",  upload.single("image"), createMedicine);
+router.post("/", protect, pharmacistOnly, upload.single("image"), createMedicine);
 router.put("/:id", protect, pharmacistOnly, upload.single("image"), updateMedicine);
 router.delete("/:id", protect, pharmacistOnly, deleteMedicine);
 
