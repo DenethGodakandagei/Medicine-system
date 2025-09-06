@@ -181,7 +181,7 @@ export default function BrowseMedicines() {
   return (
     <div className="min-h-screen bg-gray-50 w-full">
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6 text-gray-800">Browse Medicines</h1>
+        <h1 className="text-3xl font-bold mb-6 text-gray-800">Explore Available Medicines</h1>
 
         {/* Search + Filters */}
         <div className="mb-6 space-y-4">
