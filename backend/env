@@ -1,0 +1,14 @@
+# Server
+PORT=5000
+ACCESS_SECRET=1223334erweerrwerr4342323423434erwerwrwewr4242
+REFRESH_SECRET=234334dsdfsdfsdsdfsdfsfsfsdfsdfswrerwwerwerwr
+EXTERNAL_API_KEY=sdsdsa55ewrfsdfsdfsdf
+
+
+# Database
+MONGO_URI=mongodb+srv://root:Medicine2025@cluster0.czj1fr1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
+# cloudinary
+CLOUDINARY_CLOUD_NAME=dyfllgtxc
+CLOUDINARY_API_KEY=651946474789299
+CLOUDINARY_API_SECRET=nX-sGdgykNfiVc2IQQZdj7rKuss
