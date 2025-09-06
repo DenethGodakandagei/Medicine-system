@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useRouter } from "next/navigation";
 
@@ -8,9 +8,14 @@ export default function ProfilePage() {
   const { accessToken, user } = useContext(AuthContext);
   const router = useRouter();
 
+  useEffect(() => {
+    if (!accessToken || !user) {
+      router.push("/login");
+    }
+  }, [accessToken, user, router]);
+
   if (!accessToken || !user) {
-    router.push("/login");
-    return null;
+    return null; // Prevents rendering until redirect happens
   }
 
   return (
