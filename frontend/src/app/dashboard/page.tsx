@@ -93,7 +93,7 @@ const Page = () => {
             <div>
               {/* Normal User Section */}
               <div className="bg-gray-50 text-gray-700 p-4 rounded-md mb-6 text-center font-medium border">
-                Welcome{user.name ? `, ${user.name}` : ""}. You have access to
+                Welcome{user.name ? , ${user.name} : ""}. You have access to
                 the normal dashboard.
               </div>
 
