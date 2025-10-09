@@ -28,9 +28,6 @@ app.use("/api/healthTips", healthTipRoutes);
 
 
 
-
-
-
 // Health check
 app.get("/", (req, res) => res.send("API is running"));
 

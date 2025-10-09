@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
+  const router = useRouter()
   const { accessToken, user, logout } = useContext(AuthContext);
 
   return (
