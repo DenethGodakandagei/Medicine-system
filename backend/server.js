@@ -7,49 +7,26 @@ import authRoutes from "./routes/authRoutes.js";
 import pharmacistRoutes from "./routes/pharmacistRoutes.js";
 import medicineRoutes from "./routes/medicineRoutes.js";
 import healthTipRoutes from "./routes/healthTipRoutes.js";
+import requestMedicineRoutes from "./routes/requestMedicineRoutes.js";
 
 dotenv.config();
 
 // Connect to MongoDB
-connectDB();
 
 const app = express();
+connectDB();
 
-
-// Middleware
-app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:3000", // allow frontend
-  credentials: true,
-}));
-
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/pharmacists", pharmacistRoutes);
 app.use("/api/medicines", medicineRoutes);
 app.use("/api/healthTips", healthTipRoutes);
+app.use("/api/request", requestMedicineRoutes);
 
-
-app.get("/", (req, res) => res.send("API is running"));
-
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(` Server running on port ${PORT}`));
-
-// Health check
-app.get("/", (req, res) => res.send("API is running"));
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(err.status || 500).json({
-    success: false,
-    message: err.message || "Server Error",
-  });
-});
-
-const PORT = process.env.PORT || 5000;
+const PORT = 4000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });

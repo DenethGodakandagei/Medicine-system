@@ -57,8 +57,6 @@ export const getUserRequests = async (req, res) => {
       })
       .sort({ createdAt: -1 });
 
-    console.log("Fetched requests:", requests);
-
     res.status(200).json({ data: requests });
   } catch (error) {
     res
@@ -81,13 +79,13 @@ export const getPharmacistRequests = async (req, res) => {
 
     // find pharmacist profile linked to this user
     const pharmacist = await Pharmacist.findOne({ user: userId });
-    console.log("Found pharmacist profile:", pharmacist);
+    // console.log("Found pharmacist profile:", pharmacist);
 
     if (!pharmacist) {
       return res.status(404).json({ message: "Pharmacist profile not found" });
     }
 
-    console.log("Fetching requests for pharmacistId:", pharmacist._id);
+    // console.log("Fetching requests for pharmacistId:", pharmacist._id);
 
     // fetch only requests belonging to this pharmacist
     const requests = await requestMedicineModel
@@ -96,7 +94,7 @@ export const getPharmacistRequests = async (req, res) => {
       .populate("userId", "firstName lastName email")
       .sort({ createdAt: -1 });
 
-    console.log("Fetched requests:", requests.length);
+    // console.log("Fetched requests:", requests.length);
 
     res.status(200).json({ data: requests });
   } catch (error) {
@@ -108,14 +106,27 @@ export const getPharmacistRequests = async (req, res) => {
   }
 };
 
-// Update request (PUT)
+// Update request - change the status of order (PUT)
 export const updateRequest = async (req, res) => {
   try {
     const { requestId } = req.params;
-    const updateData = req.body;
+    const { status } = req.body;
+    const user = req.user; // assuming you attach logged-in user to req.user via middleware
 
+    // Check if user is a pharmacist
+    if (!user || user.role !== "pharmacist") {
+      return res
+        .status(403)
+        .json({ message: "Only pharmacists can update requests" });
+    }
+
+    // Update status
     const updated = await requestMedicineModel
-      .findByIdAndUpdate(requestId, updateData, { new: true })
+      .findByIdAndUpdate(
+        requestId,
+        { status }, // status must be wrapped in object
+        { new: true }
+      )
       .populate("medicineId")
       .populate("pharmacistId")
       .populate("userId");
