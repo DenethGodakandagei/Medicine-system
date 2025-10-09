@@ -9,89 +9,109 @@ const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 p-6">
-      <div className="max-w-7xl mx-auto mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="min-h-screen bg-gradient-to-br from-[#E3F2FD] via-[#E8F0FE] to-[#F3F8FF] p-6">
+      <div className="max-w-7xl mx-auto mt-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* Sidebar / Profile Section */}
-        <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 lg:col-span-1">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Profile</h2>
+        {/* Sidebar / Profile Card */}
+        <div className="backdrop-blur-lg bg-white/70 border border-white/40 shadow-xl rounded-2xl p-6">
+          <h2 className="text-xl font-bold text-[#1A237E] mb-6">👤 Profile</h2>
+
           {!user ? (
-            <div className="bg-red-50 text-red-700 p-4 rounded-md text-center font-medium">
+            <div className="bg-red-100 text-red-700 p-4 rounded-md text-center font-medium">
               Please log in to view your dashboard.
             </div>
           ) : (
-            <div className="space-y-3 text-gray-700">
-              <p>
-                <span className="font-medium">Name:</span> {user.name || 'Guest'}
-              </p>
-              <p>
-                <span className="font-medium">Role:</span> {user.role}
-              </p>
-              <div className="mt-4 p-3 rounded-md bg-gray-50 text-sm text-gray-600 border">
-                Status: Active
+            <div className="space-y-4 text-gray-700">
+              <div className="flex items-center gap-4">
+                <img
+                  src="https://randomuser.me/api/portraits/men/46.jpg"
+                  alt="User Avatar"
+                  className="w-16 h-16 rounded-full border-2 border-blue-500 shadow-md"
+                />
+                <div>
+                  <p className="text-lg font-semibold text-[#0D47A1]">{user.name || 'Guest User'}</p>
+                  <p className="text-sm text-gray-600 capitalize">{user.role}</p>
+                </div>
+              </div>
+              <div className="bg-gradient-to-r from-blue-100 to-blue-50 p-4 rounded-md border border-blue-200">
+                <p className="font-medium text-blue-800 text-center">Status: Active</p>
               </div>
             </div>
           )}
         </div>
 
         {/* Main Dashboard Section */}
-        <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 lg:col-span-2">
-          <h1 className="text-2xl font-bold mb-6 text-center text-gray-900">
+        <div className="lg:col-span-2 backdrop-blur-lg bg-white/70 border border-white/40 shadow-xl rounded-2xl p-8">
+          <h1 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-blue-700 to-indigo-600 text-transparent bg-clip-text">
             Dashboard
           </h1>
 
-          {!user ? (
-            <div className="text-center text-gray-500">
-              Please log in to access dashboard features.
-            </div>
-          ) : user.role === 'pharmacist' ? (
+          {/* ---------------- Pharmacist View ---------------- */}
+          {user && user.role === 'pharmacist' ? (
             <div>
-              {/* Pharmacist Section */}
-              <div className="bg-gray-50 text-gray-700 p-4 rounded-md mb-6 text-center font-medium border">
-                Welcome, {user.name || 'Pharmacist'} — you can manage medicines below.
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 text-blue-900 p-4 rounded-lg mb-6 text-center font-medium shadow-sm">
+                Welcome, <span className="font-semibold">{user.name || 'Pharmacist'}</span> — Manage your medicines below.
               </div>
 
               {/* Add Medicine Button */}
               <div className="flex justify-center mb-6">
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  className="px-5 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold shadow hover:scale-105 transition-transform"
+                  className="px-6 py-3 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold shadow-lg hover:scale-105 transition-transform duration-200"
                 >
-                  Add New Medicine
+                   Add New Medicine
                 </button>
               </div>
 
-              {/* Example Filled Content: Recent Medicines */}
-              <h2 className="text-lg font-semibold mb-3 text-gray-800">Recent Medicines</h2>
-              <ul className="space-y-3">
-                <li className="p-3 rounded-md border bg-gray-50 flex justify-between">
-                  <span>Paracetamol 500mg</span>
-                  <span className="text-gray-500 text-sm">Stock: 120</span>
-                </li>
-                <li className="p-3 rounded-md border bg-gray-50 flex justify-between">
-                  <span>Amoxicillin 250mg</span>
-                  <span className="text-gray-500 text-sm">Stock: 80</span>
-                </li>
-                <li className="p-3 rounded-md border bg-gray-50 flex justify-between">
-                  <span>Cetirizine 10mg</span>
-                  <span className="text-gray-500 text-sm">Stock: 45</span>
-                </li>
-              </ul>
+              {/* Medicine List */}
+              <h2 className="text-xl font-semibold mb-4 text-[#0D47A1]">Recent Medicines</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {[
+                  { name: 'Paracetamol 500mg', stock: 120 },
+                  { name: 'Amoxicillin 250mg', stock: 80 },
+                  { name: 'Cetirizine 10mg', stock: 45 },
+                  { name: 'Vitamin C 1000mg', stock: 200 },
+                ].map((med, i) => (
+                  <div
+                    key={i}
+                    className="p-4 bg-gradient-to-r from-blue-50 to-white border border-blue-100 rounded-lg shadow-sm flex justify-between items-center hover:shadow-md transition-all"
+                  >
+                    <span className="font-medium text-gray-800">{med.name}</span>
+                    <span className="text-sm text-blue-700">Stock: {med.stock}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-          ) : (
+          ) : user ? (
+            /* ---------------- Normal User View ---------------- */
             <div>
-              {/* Normal User Section */}
-              <div className="bg-gray-50 text-gray-700 p-4 rounded-md mb-6 text-center font-medium border">
-                Welcome{user.name ? `, ${user.name}` : ''}. You have access to the normal dashboard.
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 text-blue-900 p-4 rounded-lg mb-6 text-center font-medium shadow-sm">
+                Welcome{user.name ? `, ${user.name}` : ''}! Enjoy personalized health tips below.
               </div>
 
-              {/* Example Filled Content: Health Tips */}
-              <h2 className="text-lg font-semibold mb-3 text-gray-800">Health Tips</h2>
-              <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                <li>Drink at least 8 glasses of water a day</li>
-                <li>Exercise for 30 minutes, 5 times a week</li>
-                <li>Maintain a balanced diet with fruits & vegetables</li>
+              <h2 className="text-xl font-semibold mb-4 text-[#0D47A1]">💡 Health Tips</h2>
+              <ul className="space-y-3 text-gray-700">
+                <li className="p-3 rounded-md bg-gradient-to-r from-white to-blue-50 border border-blue-100">
+                  🩺 Drink at least 8 glasses of water daily
+                </li>
+                <li className="p-3 rounded-md bg-gradient-to-r from-white to-blue-50 border border-blue-100">
+                  🚴 Exercise 30 minutes a day for better health
+                </li>
+                <li className="p-3 rounded-md bg-gradient-to-r from-white to-blue-50 border border-blue-100">
+                  🥗 Eat more fruits and vegetables to boost immunity
+                </li>
               </ul>
+
+              <div className="mt-10 bg-gradient-to-r from-indigo-50 to-blue-50 p-6 rounded-xl border border-indigo-100 text-center">
+                <p className="font-medium text-gray-700 mb-2">Need personalized advice?</p>
+                <button className="px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full shadow hover:scale-105 transition-transform">
+                  Contact Our Health Experts
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="text-center text-gray-500">
+              Please log in to access your dashboard.
             </div>
           )}
         </div>
@@ -99,22 +119,22 @@ const Page = () => {
 
       {/* Add Medicine Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col relative">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg flex flex-col relative overflow-hidden">
             
             {/* Header */}
-            <div className="flex justify-between items-center p-4 border-b">
-              <h2 className="text-xl font-semibold text-gray-800">Add Medicine</h2>
+            <div className="flex justify-between items-center p-4 border-b bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+              <h2 className="text-lg font-semibold">Add Medicine</h2>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="text-gray-500 hover:text-red-500"
+                className="text-white hover:text-red-300 transition"
               >
                 ✖
               </button>
             </div>
 
             {/* Scrollable Content */}
-            <div className="p-6 overflow-y-auto">
+            <div className="p-6 overflow-y-auto max-h-[80vh]">
               <AddMedicine />
             </div>
           </div>
