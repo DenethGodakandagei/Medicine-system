@@ -5,6 +5,7 @@ import {
   getPharmacistRequests,
   updateRequest,
   deleteRequest,
+  createRequests,
 } from "../controllers/requestMedicineController.js";
 import { protect, pharmacistOnly } from "../middleware/authMiddleware.js";
 
@@ -20,5 +21,6 @@ requestMedicineRoutes.get(
 ); // Get requests by pharmacist
 requestMedicineRoutes.put("/:requestId", protect, updateRequest); // Update request (status/quantity/etc.)
 requestMedicineRoutes.delete("/:requestId", protect, deleteRequest); // Delete request
+requestMedicineRoutes.post("/my", protect, createRequests); // request cart
 
 export default requestMedicineRoutes;
