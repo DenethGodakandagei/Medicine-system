@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "../context/AuthContext";
 import Navbar from "./components/Navbar";
+import AIChatBot from "./components/AIChatBot";
 import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
@@ -20,6 +21,8 @@ export default function RootLayout({
         <AuthProvider>
           <Navbar />
           <main>{children}</main>
+          <AIChatBot />
+          </AuthProvider>
           <Toaster
             position="top-center"
             toastOptions={{
