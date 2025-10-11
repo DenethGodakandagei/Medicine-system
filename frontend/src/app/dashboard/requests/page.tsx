@@ -65,7 +65,7 @@ export default function RequestedMedicinePage() {
 
     const fetchRequests = async () => {
       try {
-        const res = await API.get(`/request/${requestedRole}`, {
+        const res = await API.get(`/requests/${requestedRole}`, {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
 
@@ -76,6 +76,7 @@ export default function RequestedMedicinePage() {
         setLoading(false);
       }
     };
+
     fetchRequests();
   }, [requestedRole, accessToken]);
 
@@ -85,8 +86,13 @@ export default function RequestedMedicinePage() {
     );
   };
 
-  if (loading) return <p className="p-4">Loading your requests...</p>;
+  useEffect(() => {
+    if (!loading && !accessToken) {
+      router.replace("/");
+    }
+  }, [loading, accessToken, router]);
 
+  if (loading) return <p className="p-4">Loading your requests...</p>;
   return (
     <div className="p-6">
       <button
@@ -157,7 +163,7 @@ function RequestRow({ request, role, accessToken, onUpdate }: RequestRowProps) {
     setLoading(true);
     try {
       const res = await API.put(
-        `/request/${_id}`,
+        `/requests/${_id}`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${accessToken}` } }
       );

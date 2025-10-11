@@ -4,9 +4,10 @@ import { useState, useContext } from "react";
 import API from "../../services/api";
 import { AuthContext } from "../../context/AuthContext";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
-  const { login } = useContext(AuthContext); 
+  const { login } = useContext(AuthContext);
   const router = useRouter();
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
@@ -24,10 +25,13 @@ export default function LoginPage() {
       // Save accessToken, refreshToken, and user in context & localStorage
       login(data);
 
-      alert("Login successful");
+      const nickname = data.name.split(" ")[0];
+
+      toast.success(`Welcome Back ${nickname}`);
+
       router.push("/dashboard");
     } catch (err: any) {
-      alert(err.response?.data?.message || "Error");
+      toast.error(err.response?.data?.message || "Error");
     } finally {
       setLoading(false);
     }
