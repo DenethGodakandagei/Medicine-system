@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "../context/AuthContext";
 import Navbar from "./components/Navbar";
+import AIChatBot from "./components/AIChatBot";
 
 export const metadata: Metadata = {
   title: "MediCare",
@@ -15,6 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AuthProvider>
           <Navbar/>
           <main>{children}</main>
+          <AIChatBot />
           </AuthProvider>
       </body>
     </html>

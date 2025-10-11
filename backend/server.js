@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes.js";
 import pharmacistRoutes from "./routes/pharmacistRoutes.js";
 import medicineRoutes from "./routes/medicineRoutes.js";
 import healthTipRoutes from "./routes/healthTipRoutes.js";
+import aiRoutes from "./routes/aiRoutes.js";
 
 dotenv.config();
 
@@ -15,18 +16,16 @@ connectDB();
 
 const app = express();
 
-
+// Middleware
 app.use(cors());
-
-app.use(express.json());
+app.use(express.json()); // ✅ Must be before routes
 
 // Routes
+app.use("/api", aiRoutes); // AI Chatbot route
 app.use("/api/auth", authRoutes);
 app.use("/api/pharmacists", pharmacistRoutes);
 app.use("/api/medicines", medicineRoutes);
 app.use("/api/healthTips", healthTipRoutes);
-
-
 
 // Health check
 app.get("/", (req, res) => res.send("API is running"));
