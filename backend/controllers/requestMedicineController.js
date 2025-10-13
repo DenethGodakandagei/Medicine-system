@@ -46,8 +46,6 @@ export const getUserRequests = async (req, res) => {
   try {
     const userId = req.user ? req.user._id : null;
 
-    console.log("Fetching requests for user:", userId);
-
     const requests = await requestMedicineModel
       .find({ userId })
       .populate("medicineId")
@@ -57,13 +55,17 @@ export const getUserRequests = async (req, res) => {
       })
       .sort({ createdAt: -1 });
 
-    console.log("Fetched requests:", requests);
-
-    res.status(200).json({ data: requests });
+    res
+      .status(200)
+      .json({ success: true, message: "My requests fetched", data: requests });
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Error fetching requests", error: error.message });
+      .json({
+        success: false,
+        message: "Error fetching requests",
+        error: error.message,
+      });
   }
 };
 
@@ -81,13 +83,13 @@ export const getPharmacistRequests = async (req, res) => {
 
     // find pharmacist profile linked to this user
     const pharmacist = await Pharmacist.findOne({ user: userId });
-    console.log("Found pharmacist profile:", pharmacist);
+    // console.log("Found pharmacist profile:", pharmacist);
 
     if (!pharmacist) {
       return res.status(404).json({ message: "Pharmacist profile not found" });
     }
 
-    console.log("Fetching requests for pharmacistId:", pharmacist._id);
+    // console.log("Fetching requests for pharmacistId:", pharmacist._id);
 
     // fetch only requests belonging to this pharmacist
     const requests = await requestMedicineModel
@@ -96,7 +98,7 @@ export const getPharmacistRequests = async (req, res) => {
       .populate("userId", "firstName lastName email")
       .sort({ createdAt: -1 });
 
-    console.log("Fetched requests:", requests.length);
+    // console.log("Fetched requests:", requests.length);
 
     res.status(200).json({ data: requests });
   } catch (error) {
@@ -108,14 +110,27 @@ export const getPharmacistRequests = async (req, res) => {
   }
 };
 
-// Update request (PUT)
+// Update request - change the status of order (PUT)
 export const updateRequest = async (req, res) => {
   try {
     const { requestId } = req.params;
-    const updateData = req.body;
+    const { status } = req.body;
+    const user = req.user; // assuming you attach logged-in user to req.user via middleware
 
+    // Check if user is a pharmacist
+    if (!user || user.role !== "pharmacist") {
+      return res
+        .status(403)
+        .json({ message: "Only pharmacists can update requests" });
+    }
+
+    // Update status
     const updated = await requestMedicineModel
-      .findByIdAndUpdate(requestId, updateData, { new: true })
+      .findByIdAndUpdate(
+        requestId,
+        { status }, // status must be wrapped in object
+        { new: true }
+      )
       .populate("medicineId")
       .populate("pharmacistId")
       .populate("userId");
@@ -144,5 +159,56 @@ export const deleteRequest = async (req, res) => {
     res
       .status(500)
       .json({ message: "Error deleting request", error: error.message });
+  }
+};
+
+// for user requested cart
+export const createRequests = async (req, res) => {
+  console.log("createRequests cart endpoint hit");
+
+  try {
+    const { medicineIds } = req.body; // array of medicine IDs
+    const userId = req.user?._id;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized user" });
+    }
+
+    if (!Array.isArray(medicineIds) || medicineIds.length === 0) {
+      return res.status(400).json({ message: "No medicines provided" });
+    }
+
+    // ✅ Fetch all medicines at once
+    const medicines = await Medicine.find({
+      _id: { $in: medicineIds },
+    }).populate("pharmacist", "_id");
+
+    if (medicines.length === 0) {
+      return res.status(404).json({ message: "No valid medicines found" });
+    }
+
+    // ✅ Create request documents
+    const requestsToInsert = medicines.map((medicine) => ({
+      userId,
+      pharmacistId: medicine.pharmacist?._id || null, // pharmacist from DB
+      medicineId: medicine._id,
+      quantity: 1, // default quantity = 1 (or adjust as needed)
+    }));
+
+    // ✅ Bulk insert
+    const createdRequests = await requestMedicineModel.insertMany(
+      requestsToInsert
+    );
+
+    return res.status(201).json({
+      message: "Medicine requests created successfully",
+      data: createdRequests,
+    });
+  } catch (error) {
+    console.error("Error creating medicine requests:", error);
+    return res.status(500).json({
+      message: "Error creating medicine requests",
+      error: error.message,
+    });
   }
 };

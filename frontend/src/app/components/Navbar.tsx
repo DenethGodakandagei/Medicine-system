@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
+  const router = useRouter()
   const { accessToken, user, logout } = useContext(AuthContext);
 
   return (
@@ -12,7 +14,7 @@ export default function Navbar() {
       {/* Left Side - Logo */}
       <div className="flex items-center gap-3">
         <svg
-          className="text-teal-500 h-8 w-8 transition-transform duration-300 hover:rotate-12"
+          className="text-blue-500 h-8 w-8 transition-transform duration-300 hover:rotate-12"
           fill="none"
           viewBox="0 0 48 48"
           xmlns="http://www.w3.org/2000/svg"
@@ -29,13 +31,13 @@ export default function Navbar() {
       <div className="hidden md:flex items-center gap-8">
         <Link
           href="/"
-          className="text-gray-600 hover:text-teal-500 font-medium transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-teal-500 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
+          className="text-gray-600 hover:text-blue-500 font-medium transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-500 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
         >
           Home
         </Link>
         <Link
           href="/browse"
-          className="text-gray-600 hover:text-teal-500 font-medium transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-teal-500 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
+          className="text-gray-600 hover:text-blue-500 font-medium transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-500 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
         >
           Browse
         </Link>
@@ -44,19 +46,19 @@ export default function Navbar() {
           <>
             <Link
               href="/dashboard"
-              className="text-gray-600 hover:text-teal-500 font-medium transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-teal-500 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
+              className="text-gray-600 hover:text-blue-500 font-medium transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-500 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
             >
               Dashboard
             </Link>
             <Link
               href="/profile"
-              className="text-gray-600 hover:text-teal-500 font-medium transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-teal-500 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
+              className="text-gray-600 hover:text-blue-500 font-medium transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-500 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
             >
               Profile
             </Link>
             <Link
               href="/healthTips"
-              className="text-gray-600 hover:text-teal-500 font-medium transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-teal-500 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
+              className="text-gray-600 hover:text-blue-500 font-medium transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-500 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
             >
               Health Tips
             </Link>
@@ -71,7 +73,7 @@ export default function Navbar() {
             <span className="text-gray-800 font-medium">Hi, {user.name}</span>
             <button
               onClick={logout}
-              className="bg-transparent border border-teal-500 text-teal-500 font-semibold py-2 px-6 rounded-full hover:bg-teal-500 hover:text-white transition-all duration-300 ease-in-out transform hover:shadow-lg"
+              className="bg-transparent border border-blue-500 text-blue-500 font-semibold py-2 px-6 rounded-full hover:bg-blue-500 hover:text-white transition-all duration-300 ease-in-out transform hover:shadow-lg"
             >
               Logout
             </button>
@@ -80,13 +82,13 @@ export default function Navbar() {
           <>
             <Link
               href="/login"
-              className="bg-transparent border border-teal-500 text-teal-500 font-semibold py-2 px-6 rounded-full hover:bg-teal-500 hover:text-white transition-all duration-300 ease-in-out transform hover:shadow-lg"
+              className="bg-transparent border border-blue-500 text-blue-500 font-semibold py-2 px-6 rounded-full hover:bg-blue-500 hover:text-white transition-all duration-300 ease-in-out transform hover:shadow-lg"
             >
               Login
             </Link>
             <Link
               href="/register"
-              className="bg-teal-500 text-white font-semibold py-2 px-6 rounded-full shadow-md hover:bg-teal-400 hover:shadow-lg transition-all duration-300 ease-in-out transform hover:shadow-xl"
+              className="bg-blue-500 text-white font-semibold py-2 px-6 rounded-full shadow-md hover:bg-blue-400 hover:shadow-lg transition-all duration-300 ease-in-out transform hover:shadow-xl"
             >
               Register
             </Link>
