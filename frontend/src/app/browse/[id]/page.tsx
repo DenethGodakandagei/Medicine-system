@@ -1,34 +1,35 @@
-"use client"
+"use client";
 
-import React, { useEffect, useState } from "react"
-import { useParams } from "next/navigation"
-import API from "@/services/api"
-import toast from "react-hot-toast"
+import React, { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import API from "@/services/api";
+import toast from "react-hot-toast";
 
 interface Medicine {
-  id: string
-  name: string
-  brand: string
-  description: string
-  category: string
-  dosage: string
-  price: number
-  stock: number
-  expiryDate: string
-  prescriptionRequired: boolean
-  image: string
+  id: string;
+  name: string;
+  brand: string;
+  description: string;
+  category: string;
+  dosage: string;
+  price: number;
+  stock: number;
+  expiryDate: string;
+  prescriptionRequired: boolean;
+  image: string;
 }
 
 export default function MedicineDetailsPage() {
-  const { id } = useParams()
-  const [medicine, setMedicine] = useState<Medicine | null>(null)
-  const [loading, setLoading] = useState(true)
+  const { id } = useParams();
+  const [medicine, setMedicine] = useState<Medicine | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchMedicine = async () => {
       try {
-        setLoading(true)
-        const res = await API.get(`/medicines/${id}`)
+        setLoading(true);
+        const res = await API.get(`/medicines/${id}`);
+
         // API returns medicine inside data.data
         setMedicine({
           id: res.data.data._id,
@@ -42,20 +43,20 @@ export default function MedicineDetailsPage() {
           expiryDate: res.data.data.expiryDate,
           prescriptionRequired: res.data.data.prescriptionRequired,
           image: res.data.data.image,
-        })
+        });
       } catch (err) {
-        console.error(err)
-        toast.error("Failed to fetch medicine details")
+        console.error(err);
+        toast.error("Failed to fetch medicine details");
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    if (id) fetchMedicine()
-  }, [id])
+    if (id) fetchMedicine();
+  }, [id]);
 
-  if (loading) return <p className="py-12 text-center">Loading...</p>
-  if (!medicine) return <p className="py-12 text-center">Medicine not found</p>
+  if (loading) return <p className="py-12 text-center">Loading...</p>;
+  if (!medicine) return <p className="py-12 text-center">Medicine not found</p>;
 
   return (
     <div className="container px-4 py-8 mx-auto">
@@ -96,5 +97,5 @@ export default function MedicineDetailsPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
