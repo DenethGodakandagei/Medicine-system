@@ -154,7 +154,7 @@ export default function AddMedicine() {
         formDataToSend.append("image", image);
       }
 
-      const response = await fetch("http://localhost:5000/api/medicines", {
+      const response = await fetch("http://localhost:4000/api/medicines", {
         method: "POST",
         body: formDataToSend,
       });
@@ -223,7 +223,7 @@ export default function AddMedicine() {
     [key: string]: any;
   }) => (
     <div>
-      <label className="block text-sm font-semibold text-gray-700 mb-2">
+      <label className="block mb-2 text-sm font-semibold text-gray-700">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
       <input
@@ -245,13 +245,13 @@ export default function AddMedicine() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4">
+    <div className="min-h-screen py-8 bg-gray-50">
+      <div className="max-w-4xl px-4 mx-auto">
         {/* Header */}
         <div className="mb-8">
           <button
             onClick={() => router.back()}
-            className="mb-4 flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+            className="flex items-center mb-4 text-blue-600 transition-colors hover:text-blue-800"
             disabled={isLoading}
           >
             <svg
@@ -269,7 +269,7 @@ export default function AddMedicine() {
             </svg>
             Back to Medicines
           </button>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="mb-2 text-3xl font-bold text-gray-900">
             Add New Medicine
           </h1>
           <p className="text-gray-600">
@@ -279,11 +279,11 @@ export default function AddMedicine() {
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white rounded-lg shadow-sm border border-gray-200"
+          className="bg-white border border-gray-200 rounded-lg shadow-sm"
         >
           <div className="p-8 space-y-6">
             {/* Basic Information */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <InputField
                 label="Medicine Name"
                 name="name"
@@ -301,7 +301,7 @@ export default function AddMedicine() {
             </div>
 
             {/* Dosage and Category */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <InputField
                 label="Dosage"
                 name="dosage"
@@ -310,14 +310,14 @@ export default function AddMedicine() {
               />
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block mb-2 text-sm font-semibold text-gray-700">
                   Category
                 </label>
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  className="w-full px-4 py-3 transition-colors border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   disabled={isLoading}
                 >
                   {categories.map((cat) => (
@@ -330,7 +330,7 @@ export default function AddMedicine() {
             </div>
 
             {/* Price and Stock */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <InputField
                 label="Price ($)"
                 name="price"
@@ -354,7 +354,7 @@ export default function AddMedicine() {
 
             {/* Expiry Date */}
             <div className="md:w-1/2">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block mb-2 text-sm font-semibold text-gray-700">
                 Expiry Date
               </label>
               <input
@@ -377,7 +377,7 @@ export default function AddMedicine() {
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block mb-2 text-sm font-semibold text-gray-700">
                 Description
               </label>
               <textarea
@@ -392,13 +392,13 @@ export default function AddMedicine() {
                 }`}
                 disabled={isLoading}
               />
-              <div className="mt-1 flex justify-between">
+              <div className="flex justify-between mt-1">
                 {errors.description && (
                   <p className="text-sm text-red-600">
                     {errors.description}
                   </p>
                 )}
-                <p className="text-sm text-gray-500 ml-auto">
+                <p className="ml-auto text-sm text-gray-500">
                   {formData.description.length}/500
                 </p>
               </div>
@@ -406,23 +406,23 @@ export default function AddMedicine() {
 
             {/* Image Upload */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block mb-2 text-sm font-semibold text-gray-700">
                 Medicine Image
               </label>
               <div className="flex items-center space-x-6">
                 <div className="shrink-0">
                   {imagePreview ? (
                     <Image
-                      className="h-24 w-24 object-cover rounded-lg border border-gray-300"
+                      className="object-cover w-24 h-24 border border-gray-300 rounded-lg"
                       src={imagePreview}
                       alt="Medicine preview"
                       width={96}
                       height={96}
                     />
                   ) : (
-                    <div className="h-24 w-24 bg-gray-100 rounded-lg border border-gray-300 flex items-center justify-center">
+                    <div className="flex items-center justify-center w-24 h-24 bg-gray-100 border border-gray-300 rounded-lg">
                       <svg
-                        className="h-8 w-8 text-gray-400"
+                        className="w-8 h-8 text-gray-400"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -443,7 +443,7 @@ export default function AddMedicine() {
                     name="image"
                     onChange={handleImage}
                     accept="image/*"
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-colors"
+                    className="block w-full text-sm text-gray-500 transition-colors file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                     disabled={isLoading}
                   />
                   <p className="mt-1 text-sm text-gray-500">
@@ -463,7 +463,7 @@ export default function AddMedicine() {
                 name="prescriptionRequired"
                 checked={formData.prescriptionRequired}
                 onChange={handleChange}
-                className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                 disabled={isLoading}
               />
               <label className="ml-3 text-sm font-semibold text-gray-700">
@@ -477,11 +477,11 @@ export default function AddMedicine() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                  className="flex items-center px-8 py-3 font-semibold text-white transition-colors bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isLoading && (
                     <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      className="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -508,7 +508,7 @@ export default function AddMedicine() {
                   type="button"
                   onClick={() => router.back()}
                   disabled={isLoading}
-                  className="px-8 py-3 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-8 py-3 font-semibold text-gray-700 transition-colors bg-gray-100 rounded-lg hover:bg-gray-200 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Cancel
                 </button>
@@ -518,8 +518,8 @@ export default function AddMedicine() {
         </form>
 
         {/* Category Legend */}
-        <div className="mt-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="p-6 mt-8 bg-white border border-gray-200 rounded-lg shadow-sm">
+          <h3 className="mb-4 text-lg font-semibold text-gray-900">
             Available Categories
           </h3>
           <div className="flex flex-wrap gap-3">

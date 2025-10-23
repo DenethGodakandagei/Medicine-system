@@ -61,6 +61,7 @@ export const getMedicines = async (req, res) => {
 
 // Get single medicine by ID
 export const getMedicineById = async (req, res) => {
+  console.log("Fetching medicine with ID:", req.params.id);
   try {
     const medicine = await Medicine.findById(req.params.id).populate(
       "pharmacist",
