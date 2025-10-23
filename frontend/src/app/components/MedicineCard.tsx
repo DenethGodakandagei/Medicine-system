@@ -1,11 +1,11 @@
-// MedicineCard.tsx
 "use client"
 
 import React from "react"
+import { useRouter } from "next/navigation"
 
 interface MedicineCardProps {
   medicine: {
-    id: string // ✅ changed from number → string
+    id: string
     name: string
     category: string
     expiryDate: string
@@ -27,6 +27,13 @@ export const MedicineCard: React.FC<MedicineCardProps> = ({
   isExpiringSoon,
   isExpired,
 }) => {
+  const router = useRouter()
+
+  // Navigate to medicine detail page
+  const handleViewDetails = () => {
+    router.push(`/browse/${medicine.id}`)
+  }
+
   return (
     <div
       className={`border rounded-lg shadow-sm p-4 bg-white transition hover:shadow-md ${
@@ -36,31 +43,41 @@ export const MedicineCard: React.FC<MedicineCardProps> = ({
       <img
         src={medicine.image}
         alt={medicine.name}
-        className="w-full h-40 object-cover rounded-md mb-3"
+        className="object-cover w-full h-40 mb-3 rounded-md"
       />
-      <h3 className="font-semibold text-lg text-gray-800">{medicine.name}</h3>
+      <h3 className="text-lg font-semibold text-gray-800">{medicine.name}</h3>
       <p className="text-sm text-gray-600">{medicine.category}</p>
-      <p className="text-sm text-gray-500 mt-1">
+      <p className="mt-1 text-sm text-gray-500">
         {medicine.location} • {medicine.distance} km
       </p>
 
       {isExpiringSoon && !isExpired && (
-        <p className="text-yellow-600 text-sm mt-1">⚠️ Expiring Soon</p>
+        <p className="mt-1 text-sm text-yellow-600">⚠️ Expiring Soon</p>
       )}
-      {isExpired && (
-        <p className="text-red-600 text-sm mt-1">❌ Expired</p>
-      )}
+      {isExpired && <p className="mt-1 text-sm text-red-600">❌ Expired</p>}
 
-      <button
-        onClick={onRequest}
-        className={`mt-3 w-full py-2 rounded-md font-medium transition ${
-          isRequested
-            ? "bg-green-100 text-green-700 border border-green-300"
-            : "bg-blue-600 text-white hover:bg-blue-700"
-        }`}
-      >
-        {isRequested ? "Requested" : "Request Medicine"}
-      </button>
+      {/* Buttons */}
+      <div className="flex flex-col gap-2 mt-3">
+        {/* Request Medicine Button */}
+        <button
+          onClick={onRequest}
+          className={`w-full py-2 rounded-md font-medium transition ${
+            isRequested
+              ? "bg-green-100 text-green-700 border border-green-300"
+              : "bg-blue-600 text-white hover:bg-blue-700"
+          }`}
+        >
+          {isRequested ? "Requested" : "Request Medicine"}
+        </button>
+
+        {/* View Details Button */}
+        <button
+          onClick={handleViewDetails}
+          className="w-full py-2 font-medium text-gray-800 transition bg-gray-200 rounded-md hover:bg-gray-300"
+        >
+          View Details
+        </button>
+      </div>
     </div>
   )
 }
