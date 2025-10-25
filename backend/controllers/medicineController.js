@@ -61,13 +61,14 @@ export const getMedicines = async (req, res) => {
 
 // Get single medicine by ID
 export const getMedicineById = async (req, res) => {
+  console.log("Fetching medicine with ID:", req.params.id);
   try {
     const medicine = await Medicine.findById(req.params.id).populate(
       "pharmacist",
       "pharmacyName licenseNumber"
     );
     if (!medicine) return res.status(404).json({ message: "Medicine not found" });
-    res.json(medicine);
+    res.json({ data : medicine });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
