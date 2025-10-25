@@ -217,19 +217,17 @@ export default function BrowseMedicines() {
 
   // ------------------- Render -------------------
   return (
-    <div className="min-h-screen bg-gray-50 w-full">
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6 text-gray-800">
-          Browse Medicines
-        </h1>
-
+    <div className="w-full min-h-screen bg-gray-50">
+      <div className="container px-4 py-8 mx-auto">
+        <h1 className="mb-6 text-3xl font-bold text-gray-800">Explore Available Medicines</h1>
+       
         {/* Loading & Error States */}
         {loading ? (
-          <div className="text-center text-gray-600 py-20">
+          <div className="py-20 text-center text-gray-600">
             Loading medicines...
           </div>
         ) : error ? (
-          <div className="text-center text-red-600 py-20">{error}</div>
+          <div className="py-20 text-center text-red-600">{error}</div>
         ) : (
           <>
             {/* Search + Filters */}
@@ -242,7 +240,7 @@ export default function BrowseMedicines() {
                 placeholder="Search medicines by name or category..."
               />
 
-              <div className="flex flex-col sm:flex-row justify-between gap-4">
+              <div className="flex flex-col justify-between gap-4 sm:flex-row">
                 <FilterChips
                   options={filterOptions}
                   activeFilter={activeFilter}
@@ -285,7 +283,7 @@ export default function BrowseMedicines() {
 
             {/* Request Summary */}
             {requestedMedicines.length > 0 && (
-              <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
+              <div className="p-4 mb-6 border border-blue-100 rounded-lg bg-blue-50">
                 <p className="text-blue-800">
                   <span className="font-medium">
                     {requestedMedicines.length}
@@ -293,7 +291,7 @@ export default function BrowseMedicines() {
                   medicine(s) added to your request list
                 </p>
                 <button
-                  className="mt-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                  className="px-4 py-2 mt-2 text-white transition bg-blue-600 rounded-md hover:bg-blue-700"
                   onClick={handleSendRequests}
                   disabled={requestedMedicines.length === 0}
                 >
@@ -306,7 +304,7 @@ export default function BrowseMedicines() {
 
             {/* Grid / Map View */}
             {viewMode === "grid" ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {filteredMedicines.length > 0 ? (
                   filteredMedicines.map((medicine) => (
                     <MedicineCard
@@ -319,13 +317,13 @@ export default function BrowseMedicines() {
                     />
                   ))
                 ) : (
-                  <div className="col-span-full text-center py-12 text-gray-500">
+                  <div className="py-12 text-center text-gray-500 col-span-full">
                     No medicines found matching your criteria.
                   </div>
                 )}
               </div>
             ) : (
-              <div className="bg-gray-200 rounded-lg h-96 flex items-center justify-center">
+              <div className="flex items-center justify-center bg-gray-200 rounded-lg h-96">
                 <p className="text-gray-600">
                   Map view will be available in a future update.
                 </p>
