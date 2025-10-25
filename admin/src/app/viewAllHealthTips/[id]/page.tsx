@@ -27,7 +27,7 @@ export default function UpdateHealthTipPage() {
   useEffect(() => {
     const fetchHealthTip = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/healthTips/${id}`);
+        const res = await fetch(`http://localhost:4000/api/healthTips/${id}`);
         const data = await res.json();
         if (res.ok) {
           setHealthTip(data.data);
@@ -63,7 +63,7 @@ export default function UpdateHealthTipPage() {
     if (image) formData.append("image", image);
 
     try {
-      const res = await fetch(`http://localhost:5000/api/healthTips/${healthTip._id}`, {
+      const res = await fetch(`http://localhost:4000/api/healthTips/${healthTip._id}`, {
         method: "PUT",
         body: formData,
       });
@@ -93,7 +93,7 @@ const handleDelete = async () => {
   if (!confirm("Are you sure you want to delete this health tip?")) return;
 
   try {
-    const res = await fetch(`http://localhost:5000/api/healthTips/${healthTip._id}`, {
+    const res = await fetch(`http://localhost:4000/api/healthTips/${healthTip._id}`, {
       method: "DELETE",
     });
 

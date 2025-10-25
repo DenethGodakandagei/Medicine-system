@@ -21,7 +21,7 @@ export default function ViewHealthTipsPage() {
   const fetchHealthTips = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/healthTips");
+      const res = await fetch("http://localhost:4000/api/healthTips");
       const data = await res.json();
       if (res.ok) {
         setHealthTips(data.data || []);
