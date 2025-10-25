@@ -22,7 +22,7 @@ export default function RootLayout({
           <Navbar />
           <main>{children}</main>
           <AIChatBot />
-          </AuthProvider>
+          {/* </AuthProvider> */}
           <Toaster
             position="top-center"
             toastOptions={{
