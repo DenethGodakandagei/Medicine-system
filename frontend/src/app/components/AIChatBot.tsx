@@ -47,7 +47,7 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ tip }) => {
 
     try {
       // Note: This API endpoint is hardcoded for demonstration and requires a running server
-      const res = await axios.post('http://localhost:5000/api/askAI', {
+      const res = await axios.post('http://localhost:4000/api/askAI', {
         message: input,
       })
 

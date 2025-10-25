@@ -23,7 +23,7 @@ export default function AddHealthTipsPage() {
     if (image) formData.append("image", image);
 
     try {
-      const res = await fetch("http://localhost:5000/api/healthTips", {
+      const res = await fetch("http://localhost:4000/api/healthTips", {
         method: "POST",
         body: formData,
       });

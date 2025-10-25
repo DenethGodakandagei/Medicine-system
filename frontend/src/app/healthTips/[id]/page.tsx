@@ -26,7 +26,7 @@ const HealthTipPage = () => {
       setLoading(true)
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/healthTips/${id}`
+          `http://localhost:4000/api/healthTips/${id}`
         )
         setHealthTip(response.data.data)
       } catch (err) {
