@@ -13,5 +13,6 @@ Thumbs.db
 frontend/.env
 frontend/.env.local
 
-.env
 
+config.bat
+node_modules
