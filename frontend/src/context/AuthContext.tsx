@@ -2,6 +2,7 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import API from "../services/api";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 interface AuthContextType {
   accessToken: string | null;
@@ -66,6 +67,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("user");
+    toast.success("Logout Successfully");
     router.push("/");
   };
 

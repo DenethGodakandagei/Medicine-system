@@ -8,6 +8,7 @@ import pharmacistRoutes from "./routes/pharmacistRoutes.js";
 import medicineRoutes from "./routes/medicineRoutes.js";
 import healthTipRoutes from "./routes/healthTipRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
+import requestMedicineRoutes from "./routes/requestMedicineRoutes.js";
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/pharmacists", pharmacistRoutes);
 app.use("/api/medicines", medicineRoutes);
 app.use("/api/healthTips", healthTipRoutes);
+app.use('/api/requests', requestMedicineRoutes)
 
 // Health check
 app.get("/", (req, res) => res.send("API is running"));
